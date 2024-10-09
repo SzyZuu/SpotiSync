@@ -1,0 +1,23 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:SpotiSync.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="250"
+             x:Class="SpotiSync.Views.LoginView"
+             x:DataType="vm:LoginViewModel"
+             x:CompileBindings="True">
+    
+    <StackPanel VerticalAlignment="Center" Spacing="5" MaxWidth="350">
+        <Button Content="Log in to Spotify" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        
+        <TextBox VerticalAlignment="Center"
+                 FontSize="18"
+                 Text="{Binding ServerAddress}"
+                 Watermark="Server Address"
+                 UseFloatingWatermark="True"/>
+        
+        <Button Content="Continue to Jam" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    </StackPanel>
+    
+</UserControl>
