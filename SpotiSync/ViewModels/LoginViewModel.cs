@@ -1,17 +1,38 @@
-﻿using ReactiveUI;
+﻿using System.Windows.Input;
+using ReactiveUI;
 
 namespace SpotiSync.ViewModels;
 
 public class LoginViewModel : ViewModelBase
 {
     private bool _canContinue;
-
+    private bool _isLoggedIn;
+    
     private string? _serverAddress;
 
+    public ICommand LoginCommand { get; }
+    public ICommand HostCommand { get; }
+    public ICommand JoinCommand { get; }
+
+    public LoginViewModel()
+    {
+        var canNext = this.WhenAnyValue(x => x.CanContinue);
+        
+        LoginCommand = ReactiveCommand.Create(Login, canNext);
+        HostCommand = ReactiveCommand.Create(Host, canNext);
+        JoinCommand = ReactiveCommand.Create(Join, canNext);
+    }
+    
     public bool CanContinue
     {
         get { return _canContinue; }
         protected set { this.RaiseAndSetIfChanged(ref _canContinue, value); }
+    }
+
+    public bool IsLoggedIn
+    {
+        get { return _isLoggedIn; }
+        protected set { this.RaiseAndSetIfChanged(ref _isLoggedIn, value); }
     }
 
     public string? ServerAddress
@@ -19,9 +40,24 @@ public class LoginViewModel : ViewModelBase
         get { return _serverAddress; }
         set { this.RaiseAndSetIfChanged(ref _serverAddress, value); }
     }
+
+    private void Login()
+    {
+        // Spotify OAuth
+    }
+
+    private void Host()
+    {
+        // Host server (WebRTC?)
+    }
+
+    private void Join()
+    {
+        // Pop up to connect to a host
+    }
     
     private void UpdateCanContinue()
     {
-        //check if Spotify is logged in and Server connection available
+        CanContinue = !string.IsNullOrWhiteSpace(ServerAddress);
     }
 }

@@ -9,7 +9,7 @@
              x:CompileBindings="True">
     
     <StackPanel VerticalAlignment="Center" Spacing="5" MaxWidth="350">
-        <Button Content="Log in to Spotify" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Button Content="Log in to Spotify" Command="{Binding LoginCommand}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         
         <TextBox VerticalAlignment="Center"
                  FontSize="18"
@@ -17,7 +17,10 @@
                  Watermark="Server Address"
                  UseFloatingWatermark="True"/>
         
-        <Button Content="Continue to Jam" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+            <Button Content="Host Jam" Command="{Binding HostCommand}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Button Content="Connect to Jam" Command="{Binding JoinCommand}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </StackPanel>
     </StackPanel>
     
 </UserControl>
