@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using ReactiveUI;
 
 namespace SpotiSync.ViewModels;
@@ -17,6 +18,7 @@ public class LoginViewModel : ViewModelBase
     public LoginViewModel()
     {
         var canNext = this.WhenAnyValue(x => x.CanContinue);
+        this.WhenAnyValue(x => x.ServerAddress).Subscribe(_ => UpdateCanContinue());
         
         LoginCommand = ReactiveCommand.Create(Login, canNext);
         HostCommand = ReactiveCommand.Create(Host, canNext);
@@ -44,6 +46,7 @@ public class LoginViewModel : ViewModelBase
     private void Login()
     {
         // Spotify OAuth
+        System.Console.WriteLine("Login pressed");
     }
 
     private void Host()

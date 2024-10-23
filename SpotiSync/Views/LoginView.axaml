@@ -15,7 +15,7 @@
                  FontSize="18"
                  Text="{Binding ServerAddress}"
                  Watermark="Server Address"
-                 UseFloatingWatermark="True"/>
+                 UseFloatingWatermark="False"/>
         
         <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
             <Button Content="Host Jam" Command="{Binding HostCommand}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
