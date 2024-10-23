@@ -1,19 +1,23 @@
 ﻿using ReactiveUI;
+using SpotiSync.Services;
 
 namespace SpotiSync.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
+    private readonly SpotifyService _spotifyService;
+    private readonly ViewModelBase[] _pages;
+    
     public MainWindowViewModel()
     {
+        _spotifyService = new SpotifyService();
+        _pages = new ViewModelBase[]
+        {
+            new LoginViewModel(_spotifyService)
+        };
+        
         _currentPage = _pages[0];
     }
-    public string Greeting => "Mmmm Moosic";
-
-    private readonly ViewModelBase[] _pages =
-    {
-        new LoginViewModel()
-    };
 
     private ViewModelBase _currentPage;
 

@@ -3,6 +3,8 @@ using SpotifyAPI.Web;
 using System.Text.Json.Serialization;
 using DotNetEnv;
 
+TaskCompletionSource<string> _authCodeTcs = new TaskCompletionSource<string>();
+
 var builder = WebApplication.CreateBuilder(args);
 
 Env.Load();
@@ -52,6 +54,19 @@ app.MapGet("/spotify/login", () =>
 .WithName("SpotifyLogin")
 .WithOpenApi();
 
+app.MapGet("/callback", async context =>
+{
+    // Extract the authorization code from the query string
+    var query = context.Request.Query;
+    var authorizationCode = query["code"];
+
+    // Notify the waiting client that the authorization code is ready
+    _authCodeTcs.TrySetResult(authorizationCode);
+
+    // Respond to the user in the browser
+    await context.Response.WriteAsync("<html><body>Login successful! You can close this window.</body></html>");
+});
+
 // exhange code for token
 app.MapPost("/spotify/token", async ([FromBody] string code) =>
 {
@@ -71,5 +86,17 @@ app.MapPost("/spotify/token", async ([FromBody] string code) =>
 })
 .WithName("SpotifyTokenExchange")
 .WithOpenApi();
+
+app.MapGet("/spotify/poll", async context =>
+{
+    // Wait until the authorization code is received (from the Spotify callback)
+    var authorizationCode = await _authCodeTcs.Task;
+
+    // Return the authorization code to the client
+    await context.Response.WriteAsync(authorizationCode);
+
+    // Reset the TaskCompletionSource for future requests
+    _authCodeTcs = new TaskCompletionSource<string>();
+});
 
 app.Run();

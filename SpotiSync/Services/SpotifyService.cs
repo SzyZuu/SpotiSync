@@ -11,6 +11,7 @@ public class SpotifyService
 {
     private readonly string _loginUrl = "http://130.61.91.169:5008/spotify/login";
     private readonly string _tokenUrl = "http://130.61.91.169:5008/spotify/token";
+    private readonly string _pollUrl = "http://130.61.91.169:5008/spotify/poll";
 
     public void OpenSpotifyLogin()
     {
@@ -21,31 +22,21 @@ public class SpotifyService
         });
     }
 
-    public async Task<string> ListenForSpotifyCallback()
+    public async Task<string> WaitForAuthorizationCodeAsync()
     {
-        var listener = new HttpListener();
-        listener.Prefixes.Add("http://130.61.91.169:5008/callback/");
-        listener.Start();
+        using var httpClient = new HttpClient();
 
-        var context = await listener.GetContextAsync();
-        var query = context.Request.QueryString;
-        var authorizationCode = query["code"];  // extract code from query
-        
-        var response = context.Response;
-        var responseString = "<html><body>Login successful! You can close this window.</body></html>";
-        var buffer = Encoding.UTF8.GetBytes(responseString);
-        response.ContentLength64 = buffer.Length;
-        response.OutputStream.Write(buffer, 0, buffer.Length);
-        response.OutputStream.Close();
+        var response = await httpClient.GetAsync(_pollUrl);
+        response.EnsureSuccessStatusCode();
 
-        listener.Stop();
-        return authorizationCode;
+        var authCode = await response.Content.ReadAsStringAsync();
+        return authCode;
     }
 
     public async Task<TokenResponse> ExchangeCodeForToken(string authorizationCode)
     {
         using var httpClient = new HttpClient();
-        var content = new StringContent($"{{\"code\": \"{authorizationCode}\"}}", Encoding.UTF8, "application/json");
+        var content = new StringContent($"{{\"{authorizationCode}\"}}", Encoding.UTF8, "application/json");
 
         var response = await httpClient.PostAsync(_tokenUrl, content);
         response.EnsureSuccessStatusCode();

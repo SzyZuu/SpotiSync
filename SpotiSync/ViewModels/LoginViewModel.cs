@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Input;
 using ReactiveUI;
+using SpotiSync.Models;
+using SpotiSync.Services;
 
 namespace SpotiSync.ViewModels;
 
@@ -11,12 +13,15 @@ public class LoginViewModel : ViewModelBase
     
     private string? _serverAddress;
 
+    private SpotifyService _spotifyService;
+    
     public ICommand LoginCommand { get; }
     public ICommand HostCommand { get; }
     public ICommand JoinCommand { get; }
 
-    public LoginViewModel()
+    public LoginViewModel(SpotifyService spotifyService)
     {
+        _spotifyService = spotifyService;
         var canNext = this.WhenAnyValue(x => x.CanContinue);
         this.WhenAnyValue(x => x.ServerAddress).Subscribe(_ => UpdateCanContinue());
         
@@ -43,10 +48,12 @@ public class LoginViewModel : ViewModelBase
         set { this.RaiseAndSetIfChanged(ref _serverAddress, value); }
     }
 
-    private void Login()
+    private async void Login()
     {
-        // Spotify OAuth
-        System.Console.WriteLine("Login pressed");
+        _spotifyService.OpenSpotifyLogin();
+        var authCode = await _spotifyService.WaitForAuthorizationCodeAsync();
+
+        TokenResponse token = await _spotifyService.ExchangeCodeForToken(authCode);
     }
 
     private void Host()
