@@ -38,7 +38,7 @@ app.UseHttpsRedirection();
 // environment variables
 var clientId = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_ID");
 var clientSecret = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_SECRET");
-var redirectUri = "http://130.61.91.169:5008/callback";  // Replace with your server IP or domain
+var redirectUri = "http://130.61.91.169:5008/callback";
 
 // login (redirects to spotify auth)
 app.MapGet("/spotify/login", () =>
