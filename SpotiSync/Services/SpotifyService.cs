@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using SpotiSync.Models;
 
@@ -30,9 +31,9 @@ public class SpotifyService
 
         var response = await httpClient.GetAsync(_pollUrl);
         response.EnsureSuccessStatusCode();
-
-        var authCode = await response.Content.ReadAsStringAsync();
-        Console.WriteLine("auth: ", authCode);
+        
+        string authCode = await response.Content.ReadAsStringAsync();
+        Console.WriteLine("auth: " + authCode);
         return authCode;
     }
 
