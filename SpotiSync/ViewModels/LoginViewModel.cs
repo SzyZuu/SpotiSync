@@ -51,7 +51,7 @@ public class LoginViewModel : ViewModelBase
     private async void Login()
     {
         _spotifyService.OpenSpotifyLogin();
-        var authCode = await _spotifyService.WaitForAuthorizationCodeAsync();
+        string authCode = await _spotifyService.WaitForAuthorizationCodeAsync();
 
         TokenResponse token = await _spotifyService.ExchangeCodeForToken(authCode);
         Console.WriteLine("token: ", token);

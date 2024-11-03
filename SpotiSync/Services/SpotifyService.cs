@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Diagnostics;
 using System.Net.Http.Json;
@@ -31,6 +32,7 @@ public class SpotifyService
         response.EnsureSuccessStatusCode();
 
         var authCode = await response.Content.ReadAsStringAsync();
+        Console.WriteLine("auth: ", authCode);
         return authCode;
     }
 
