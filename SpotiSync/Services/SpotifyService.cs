@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Diagnostics;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ public class SpotifyService
     public async Task<TokenResponse> ExchangeCodeForToken(string authorizationCode)
     {
         using var httpClient = new HttpClient();
-        var content = new StringContent($"{{\"{authorizationCode}\"}}", Encoding.UTF8, "application/json");
+        var content = JsonContent.Create(new {code = authorizationCode});
 
         var response = await httpClient.PostAsync(_tokenUrl, content);
         response.EnsureSuccessStatusCode();

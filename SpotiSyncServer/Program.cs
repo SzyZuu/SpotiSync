@@ -68,21 +68,22 @@ app.MapGet("/callback", async context =>
 });
 
 // exhange code for token
-app.MapPost("/spotify/token", async ([FromBody] string code) =>
-{
-    var config = SpotifyClientConfig.CreateDefault();
-    var oauthClient = new OAuthClient(config);
+app.MapPost("/spotify/token", async ([FromBody] CodeRequest request) => 
+    { 
+        var code = request.Code;
+        var config = SpotifyClientConfig.CreateDefault();
+        var oauthClient = new OAuthClient(config);
 
-    var tokenRequest = new AuthorizationCodeTokenRequest(clientId, clientSecret, code, new Uri(redirectUri));
-    var tokenResponse = await oauthClient.RequestToken(tokenRequest);
+        var tokenRequest = new AuthorizationCodeTokenRequest(clientId, clientSecret, code, new Uri(redirectUri));
+        var tokenResponse = await oauthClient.RequestToken(tokenRequest);
 
-    // return access token and refresh token
-    return Results.Ok(new
-    {
-        AccessToken = tokenResponse.AccessToken,
-        RefreshToken = tokenResponse.RefreshToken,
-        ExpiresIn = tokenResponse.ExpiresIn
-    });
+        // return access token and refresh token
+        return Results.Ok(new
+        {   
+            AccessToken = tokenResponse.AccessToken,
+            RefreshToken = tokenResponse.RefreshToken,
+            ExpiresIn = tokenResponse.ExpiresIn
+        });
 })
 .WithName("SpotifyTokenExchange")
 .WithOpenApi();
@@ -100,3 +101,8 @@ app.MapGet("/spotify/poll", async context =>
 });
 
 app.Run();
+
+public class CodeRequest
+{
+    public string Code { get; set; }
+}
