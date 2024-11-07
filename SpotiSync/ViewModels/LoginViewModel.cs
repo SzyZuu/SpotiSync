@@ -54,7 +54,7 @@ public class LoginViewModel : ViewModelBase
         string authCode = await _spotifyService.WaitForAuthorizationCodeAsync();
 
         TokenResponse token = await _spotifyService.ExchangeCodeForToken(authCode);
-        Console.WriteLine("token: " + token.AccessToken);
+        Console.WriteLine("token: " + token.accessToken);
     }
 
     private void Host()
