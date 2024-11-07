@@ -8,7 +8,6 @@ namespace SpotiSync.ViewModels;
 
 public class LoginViewModel : ViewModelBase
 {
-    private bool _canContinue;
     private bool _isLoggedIn;
     
     private string? _serverAddress;
@@ -22,30 +21,24 @@ public class LoginViewModel : ViewModelBase
     public LoginViewModel(SpotifyService spotifyService)
     {
         _spotifyService = spotifyService;
-        var canNext = this.WhenAnyValue(x => x.CanContinue);
-        this.WhenAnyValue(x => x.ServerAddress).Subscribe(_ => UpdateCanContinue());
+
+        var canPress = this.WhenAnyValue(x => x.IsLoggedIn);
         
-        LoginCommand = ReactiveCommand.Create(Login, canNext);
-        HostCommand = ReactiveCommand.Create(Host, canNext);
-        JoinCommand = ReactiveCommand.Create(Join, canNext);
-    }
-    
-    public bool CanContinue
-    {
-        get { return _canContinue; }
-        protected set { this.RaiseAndSetIfChanged(ref _canContinue, value); }
+        LoginCommand = ReactiveCommand.Create(Login);
+        HostCommand = ReactiveCommand.Create(Host, canPress);
+        JoinCommand = ReactiveCommand.Create(Join, canPress);
     }
 
     public bool IsLoggedIn
     {
-        get { return _isLoggedIn; }
-        protected set { this.RaiseAndSetIfChanged(ref _isLoggedIn, value); }
+        get => _isLoggedIn;
+        protected set => this.RaiseAndSetIfChanged(ref _isLoggedIn, value);
     }
 
     public string? ServerAddress
     {
-        get { return _serverAddress; }
-        set { this.RaiseAndSetIfChanged(ref _serverAddress, value); }
+        get => _serverAddress;
+        set => this.RaiseAndSetIfChanged(ref _serverAddress, value);
     }
 
     private async void Login()
@@ -54,7 +47,8 @@ public class LoginViewModel : ViewModelBase
         string authCode = await _spotifyService.WaitForAuthorizationCodeAsync();
 
         TokenResponse token = await _spotifyService.ExchangeCodeForToken(authCode);
-        Console.WriteLine("token: " + token.accessToken);
+        IsLoggedIn = true;
+        Console.WriteLine("Logged in: " + IsLoggedIn);
     }
 
     private void Host()
@@ -65,10 +59,5 @@ public class LoginViewModel : ViewModelBase
     private void Join()
     {
         // Pop up to connect to a host
-    }
-    
-    private void UpdateCanContinue()
-    {
-        CanContinue = !string.IsNullOrWhiteSpace(ServerAddress);
     }
 }

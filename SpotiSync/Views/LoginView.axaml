@@ -18,8 +18,8 @@
                  UseFloatingWatermark="False"/>
         
         <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
-            <Button Content="Host Jam" Command="{Binding HostCommand}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Button Content="Connect to Jam" Command="{Binding JoinCommand}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Button Content="Host Jam" Command="{Binding HostCommand}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <Button Content="Connect to Jam" Command="{Binding JoinCommand}" VerticalAlignment="Center" HorizontalAlignment="Center" />
         </StackPanel>
     </StackPanel>
     
