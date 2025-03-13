@@ -14,7 +14,11 @@ const Slider = () => {
     }, []);
 
     return (
-        <input type="range" min="0" max="100" step="0.1" value={progress} disabled className={`w-[75%] ${styles.slider}`}/>
+        <div className="flex flex-row w-[100%] justify-center border-2 border-solid border-white text-[#b3b3b3]">
+            <div className="mr-2 w-10 text-right border-2 border-solid border-white">{progress}</div>
+            <input type="range" min="0" max="100" step="0.1" value={progress} disabled className={`w-[50vw] ${styles.slider}`}/>
+            <div className="ml-2 w-10 text-left border-2 border-solid border-white">100</div>
+        </div>
     );
 };
 
