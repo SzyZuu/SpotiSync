@@ -18,7 +18,9 @@ export const authOptions: NextAuthOptions = {
         },
 
         async session({ session, token }: { session: Session; token: JWT }): Promise<Session> {
-            (session as any).accessToken = token.accessToken;
+            if (token.accessToken != null) {
+                session.user.accessToken = token.accessToken;
+            }
             return session;
         },
     }
