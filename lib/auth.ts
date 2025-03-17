@@ -6,7 +6,14 @@ export const authOptions: NextAuthOptions = {
     providers: [
         SpotifyProvider({
             clientId: process.env.SPOTIFY_CLIENT_ID,
-            clientSecret: process.env.SPOTIFY_CLIENT_SECRET
+            clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+            profile: (profile) => {
+                console.log('In profile');
+                console.log(profile.id);
+                return {
+                    id: profile.id,
+                }
+            }
         }),
     ],
     callbacks: {
@@ -17,10 +24,11 @@ export const authOptions: NextAuthOptions = {
             return token;
         },
 
-        async session({ session, token }: { session: Session; token: JWT }): Promise<Session> {
+        async session({ session, token, profile }: { session: Session; token: JWT }): Promise<Session> {
             if (token.accessToken != null) {
                 session.user.accessToken = token.accessToken;
             }
+            session.user.id = profile.id
             return session;
         },
     }
