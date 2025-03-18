@@ -10,14 +10,27 @@ import {redirect, useRouter} from "next/navigation";
 const Radiofy = () =>{
     const {data: session} = useSession();
     const [albumImageUrl, setAlbumImageUrl] = useState<string>("https://picsum.photos/id/198/200");
+    const [songName, setSongName] = useState<string>("Nothing playing");
+    const [artistName, setArtistName] = useState<string>("");
 
     useEffect(() => {
         async function fetchCurrentSong(){
             if(session?.user?.accessToken){
                 const data = await getCurrentlyPlaying(session.user.accessToken);
-                console.log("Token: " + session.user.accessToken);
+                console.log(data);
                 if(data?.item?.album?.images?.length > 0){
                     setAlbumImageUrl(data.item.album.images[0].url);
+                }
+
+                if(data?.item?.name){
+                    setSongName(data.item.name);
+                }
+
+                if(data?.item?.artists?.length > 0){
+                    const artistNames = data.item.artists.map(artist => artist.name).join(", ");
+                    setArtistName(artistNames);
+                }else{
+                    console.log("error getting artist")
                 }
             }
         }
@@ -36,14 +49,16 @@ const Radiofy = () =>{
 
                 </div>
 
-                <div className="flex flex-col items-center justify-center col-start-2 p-8 gap-8">
+                <div className="flex flex-col items-center justify-center col-start-2 p-8 gap-1">
                     <Image
                         src={albumImageUrl}
                         width="200"
                         height="200"
                         alt="Song cover"
-                        className="rounded-xl"
+                        className="rounded-xl mb-8"
                     />
+                    <p className="text-5xl font-bold">{songName}</p>
+                    <p className="text-2xl mb-8">{artistName}</p>
                     <Slider />
                     <button onClick={() => signOut({callbackUrl: "/", redirect:true})} className="cursor-pointer">SIGN OUT</button>
                 </div>
