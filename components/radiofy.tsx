@@ -9,7 +9,7 @@ import {redirect, useRouter} from "next/navigation";
 
 const Radiofy = () =>{
     const {data: session} = useSession();
-    const [albumImageUrl, setAlbumImageUrl] = useState<string>("https://picsum.photos/200");
+    const [albumImageUrl, setAlbumImageUrl] = useState<string>("https://picsum.photos/id/198/200");
 
     useEffect(() => {
         async function fetchCurrentSong(){
