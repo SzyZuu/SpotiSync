@@ -12,6 +12,7 @@ const Radiofy = () =>{
     const [albumImageUrl, setAlbumImageUrl] = useState<string>("https://picsum.photos/id/198/200");
     const [songName, setSongName] = useState<string>("Nothing playing");
     const [artistName, setArtistName] = useState<string>("");
+    const [duration, setDuration] = useState<number>(0);
 
     useEffect(() => {
         async function fetchCurrentSong(){
@@ -31,6 +32,10 @@ const Radiofy = () =>{
                     setArtistName(artistNames);
                 }else{
                     console.log("error getting artist")
+                }
+
+                if(data?.item?.duration_ms){
+                    setDuration(data.item.duration_ms);
                 }
             }
         }
