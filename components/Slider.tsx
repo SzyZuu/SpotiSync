@@ -3,13 +3,19 @@
 import styles from "./Slider.module.css"
 import {useEffect, useState} from "react";
 
-const Slider = ({data}) => {
+interface SliderProps {
+    data: any;
+    onDataUpdateRequest?: () => void;
+}
+
+const Slider = ({data, onDataUpdateRequest}: SliderProps) => {
     const [duration, setDuration] = useState<number>(0);
     const [progress, setProgress] = useState<number>(0);
 
     console.log("FROM SLIDER: ")
     console.log(data);
 
+    // initial values from data prop
     useEffect(() => {
         if(data){
             setDuration(data.item.duration_ms);
@@ -17,14 +23,34 @@ const Slider = ({data}) => {
         }
     }, [data]);
 
+    // local timer
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+
+        if(duration > 0 && progress <= duration){
+            interval = setInterval(() => {
+                setProgress((prev) => {
+                    const newProgress = prev + 1000;
+                    if(newProgress < duration){
+                        return newProgress;
+                    }else{
+                        if(onDataUpdateRequest){
+                            onDataUpdateRequest();
+                        }
+                        return duration;
+                    }
+                });
+            }, 1000);
+        }
+
+        return () => clearInterval(interval);
+    }, [duration, progress, onDataUpdateRequest]);
+
     function msToString(ms){
         const minutes = Math.floor(ms / 60000);
-        const seconds = Math.floor(((progress % 60000) / 60000) * 60);
+        const seconds = Math.floor((ms % 60000) / 1000);
 
-        if(seconds < 10){
-            return minutes + ":0" + seconds;
-        }
-        return minutes + ":" + seconds;
+        return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
     }
 
     const progressDisplay = msToString(progress);

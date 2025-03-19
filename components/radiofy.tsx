@@ -15,29 +15,29 @@ const Radiofy = () =>{
 
     const [data, setData] = useState<any>();
 
-    useEffect(() => {
-        async function fetchCurrentSong(){
-            if(session?.user?.accessToken){
-                const fetchedData = await getCurrentlyPlaying(session.user.accessToken);
-                setData(fetchedData);
+    async function fetchCurrentSong(){
+        if(session?.user?.accessToken){
+            const fetchedData = await getCurrentlyPlaying(session.user.accessToken);
+            setData(fetchedData);
 
-                if(data?.item?.album?.images?.length > 0){
-                    setAlbumImageUrl(data.item.album.images[0].url);
-                }
+            if(data?.item?.album?.images?.length > 0){
+                setAlbumImageUrl(data.item.album.images[0].url);
+            }
 
-                if(data?.item?.name){
-                    setSongName(data.item.name);
-                }
+            if(data?.item?.name){
+                setSongName(data.item.name);
+            }
 
-                if(data?.item?.artists?.length > 0){
-                    const artistNames = data.item.artists.map(artist => artist.name).join(", ");
-                    setArtistName(artistNames);
-                }else{
-                    console.log("error getting artist")
-                }
+            if(data?.item?.artists?.length > 0){
+                const artistNames = data.item.artists.map(artist => artist.name).join(", ");
+                setArtistName(artistNames);
+            }else{
+                console.log("error getting artist")
             }
         }
+    }
 
+    useEffect(() => {
         fetchCurrentSong();
     }, [session]);
 
@@ -62,7 +62,7 @@ const Radiofy = () =>{
                     />
                     <p className="text-5xl font-bold">{songName}</p>
                     <p className="text-2xl mb-8">{artistName}</p>
-                    <Slider data={data} />
+                    <Slider data={data} onDataUpdateRequest={fetchCurrentSong()}/>
                     <button onClick={() => signOut({callbackUrl: "/", redirect:true})} className="cursor-pointer">SIGN OUT</button>
                 </div>
             </div>
