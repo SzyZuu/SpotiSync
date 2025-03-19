@@ -12,13 +12,15 @@ const Radiofy = () =>{
     const [albumImageUrl, setAlbumImageUrl] = useState<string>("https://picsum.photos/id/198/200");
     const [songName, setSongName] = useState<string>("Nothing playing");
     const [artistName, setArtistName] = useState<string>("");
-    const [duration, setDuration] = useState<number>(0);
+
+    const [data, setData] = useState<any>();
 
     useEffect(() => {
         async function fetchCurrentSong(){
             if(session?.user?.accessToken){
-                const data = await getCurrentlyPlaying(session.user.accessToken);
-                console.log(data);
+                const fetchedData = await getCurrentlyPlaying(session.user.accessToken);
+                setData(fetchedData);
+
                 if(data?.item?.album?.images?.length > 0){
                     setAlbumImageUrl(data.item.album.images[0].url);
                 }
@@ -32,10 +34,6 @@ const Radiofy = () =>{
                     setArtistName(artistNames);
                 }else{
                     console.log("error getting artist")
-                }
-
-                if(data?.item?.duration_ms){
-                    setDuration(data.item.duration_ms);
                 }
             }
         }
@@ -64,7 +62,7 @@ const Radiofy = () =>{
                     />
                     <p className="text-5xl font-bold">{songName}</p>
                     <p className="text-2xl mb-8">{artistName}</p>
-                    <Slider />
+                    <Slider data={data} />
                     <button onClick={() => signOut({callbackUrl: "/", redirect:true})} className="cursor-pointer">SIGN OUT</button>
                 </div>
             </div>
