@@ -12,9 +12,6 @@ const Slider = ({data, onDataUpdateRequest}: SliderProps) => {
     const [duration, setDuration] = useState<number>(0);
     const [progress, setProgress] = useState<number>(0);
 
-    console.log("FROM SLIDER: ")
-    console.log(data);
-
     // initial values from data prop
     useEffect(() => {
         if(data){
