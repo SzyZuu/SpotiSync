@@ -62,7 +62,7 @@ const Radiofy = () =>{
                     />
                     <p className="text-5xl font-bold">{songName}</p>
                     <p className="text-2xl mb-8">{artistName}</p>
-                    <Slider data={data} onDataUpdateRequest={fetchCurrentSong()}/>
+                    <Slider data={data} onDataUpdateRequest={fetchCurrentSong}/>
                     <button onClick={() => signOut({callbackUrl: "/", redirect:true})} className="cursor-pointer">SIGN OUT</button>
                 </div>
             </div>

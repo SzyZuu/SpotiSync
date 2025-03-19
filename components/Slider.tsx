@@ -30,7 +30,7 @@ const Slider = ({data, onDataUpdateRequest}: SliderProps) => {
         if(duration > 0 && progress <= duration){
             interval = setInterval(() => {
                 setProgress((prev) => {
-                    const newProgress = prev + 1000;
+                    const newProgress = prev + 100;
                     if(newProgress < duration){
                         return newProgress;
                     }else{
@@ -40,7 +40,7 @@ const Slider = ({data, onDataUpdateRequest}: SliderProps) => {
                         return duration;
                     }
                 });
-            }, 1000);
+            }, 100);
         }
 
         return () => clearInterval(interval);
