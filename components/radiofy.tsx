@@ -39,7 +39,7 @@ const Radiofy = () =>{
 
     useEffect(() => {
         fetchCurrentSong();
-    }, [session]);
+    }, [session, data]);
 
     return(
         <div className="grid grid-rows-[5vh_1fr] min-h-screen p-8 gap-8 font-[family-name:var(--font-work-sans)]">
