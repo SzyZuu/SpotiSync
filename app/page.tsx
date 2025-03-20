@@ -4,9 +4,12 @@ import Image from "next/image";
 import {useSession, signIn, signOut} from "next-auth/react";
 import LogInButton from "@/components/LogInButton";
 import Conditional from "@/components/Conditional";
+import {useState} from "react";
 
 export default function Home() {
     const session = useSession();
+    const [premium, setPremium] = useState<boolean>();
+
     const authenticated = (session.status == "authenticated")
     console.log("FROM HOME FUNCTION: ")
     console.log(session);
