@@ -11,12 +11,14 @@ interface SliderProps {
 const Slider = ({data, onDataUpdateRequest}: SliderProps) => {
     const [duration, setDuration] = useState<number>(0);
     const [progress, setProgress] = useState<number>(0);
+    const [playing, setPlaying] = useState<boolean>();
 
     // initial values from data prop
     useEffect(() => {
         if(data){
             setDuration(data.item.duration_ms);
             setProgress(data.progress_ms);
+            setPlaying(!data.is_playing);
         }
     }, [data]);
 
@@ -24,7 +26,7 @@ const Slider = ({data, onDataUpdateRequest}: SliderProps) => {
     useEffect(() => {
         let interval: NodeJS.Timeout;
 
-        if(duration > 0 && progress <= duration){
+        if(duration > 0 && progress <= duration && !playing){
             interval = setInterval(() => {
                 setProgress((prev) => {
                     const newProgress = prev + 100;
