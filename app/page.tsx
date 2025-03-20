@@ -54,7 +54,7 @@ export default function Home() {
           </Conditional>
 
           <Conditional showWhen={!premium}>
-              <p className="text-white font-bold">Sorry, you need premium to use Radiofy!</p>
+              <p className="font-bold">Sorry, you need premium to use Radiofy!</p>
           </Conditional>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
