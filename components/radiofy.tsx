@@ -55,8 +55,8 @@ const Radiofy = () =>{
                 <div className="flex flex-col items-center justify-center col-start-2 p-8 gap-1">
                     <Image
                         src={albumImageUrl}
-                        width="200"
-                        height="200"
+                        width="300"
+                        height="300"
                         alt="Song cover"
                         className="rounded-xl mb-8"
                     />
